@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Editor } from './components/Editor';
 import { Preview } from './components/Preview';
 import type { CVData } from './types/cv';
-import { ALAN_NIN_CV } from './constants/demoData';
+import { DEMO_CV_DATA } from './constants/demoData';
 import { FONT_OPTIONS } from './constants/fonts';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
         console.error('Error loading saved CV data:', e);
       }
     }
-    return ALAN_NIN_CV;
+    return DEMO_CV_DATA;
   });
 
   // Track hovered section for synchronized UI highlights

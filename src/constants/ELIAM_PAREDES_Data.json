@@ -1,28 +1,31 @@
 {
   "personalInfo": {
     "name": "ELIAM PAREDES",
-    "location": "Santo Domingo, RD",
+    "location": "Santo Domingo Este, RD",
     "email": "eliamjesusparedes@gmail.com",
     "phone": "+18296510720",
     "website": "https://maravstress.github.io"
   },
-  "summary": "Soy un profesional apasionado por la programación y el diseño, con una fuerte inclinación hacia el 3D. Mi formación en multimedia y mi actual carrera en ingeniería de software me permiten abordar proyectos desde una perspectiva técnica y creativa. Soluciones innovadoras que integren arte, código y tecnología.",
+  "summary": "Soy un profesional apasionado del desarrollo de SaaS y el diseño 3D. Mi formación en multimedia y mi actual carrera en ingeniería de software me permiten abordar proyectos desde una perspectiva técnica y creativa. Soluciones innovadoras que integren arte, código y tecnología.",
   "experience": [
     {
       "id": "exp-1",
       "company": "Upwork",
-      "location": "Online",
+      "location": "Remoto",
       "title": "Diseñador 3D y Game Designer",
-      "dates": "Abr 2024 Presente",
+      "dates": "Abr 2024 - Presente",
       "bullets": [
-        "Servicios freelance como diseñador 3D y programador de videojuegos."
+        "Diseñador 3D",
+        "Animador 3D",
+        "Programador de vidoejuegos usando unity",
+        "Integración de Three.js en sitios web"
       ],
       "references": ""
     },
     {
       "id": "exp-2",
       "company": "Marav Studios",
-      "location": "Online",
+      "location": "Remoto",
       "title": "Director / Game Dev / Marketing",
       "dates": "Nov 2020 - Presente",
       "bullets": [
@@ -34,7 +37,7 @@
     {
       "id": "exp-3",
       "company": "Promo Design dp Group",
-      "location": "Santo Domingo Este",
+      "location": "Presencial",
       "title": "Diseñador gráfico / Diseño web",
       "dates": "Nov 2020 - Abr 2024",
       "bullets": [
@@ -47,9 +50,9 @@
     {
       "id": "exp-4",
       "company": "Reckers",
-      "location": "Online",
+      "location": "Remoto",
       "title": "Game Dev / UI & UX Designer",
-      "dates": "Ago 2020 Nov 2021",
+      "dates": "Ago 2020 - Nov 2021",
       "bullets": [
         "Desarrollo del videojuego \"Reck\" (App Store) y diseño de UI & UX."
       ],
@@ -62,7 +65,7 @@
       "institution": "Universidad APEC",
       "location": "",
       "degree": "Ingeniería de Software",
-      "dates": "Abr 2024 Presente",
+      "dates": "Abr 2024 - Presente",
       "thesis": "",
       "courses": []
     },
@@ -78,14 +81,44 @@
   ],
   "skills": [
     {
+      "id": "skill-1782093696669",
+      "categoryName": "Ingregración de APIs para el uso de IA en Aplicaciones",
+      "skills": [
+        "Gemini flash 2.5",
+        "Nano Banano 2",
+        "Veo 3",
+        "Elevenlabs v2",
+        "Elevenlabs v3"
+      ]
+    },
+    {
+      "id": "skill-1782096829778",
+      "categoryName": "Herramientas",
+      "skills": [
+        "Azure Devops",
+        "Jira",
+        "GIT"
+      ]
+    },
+    {
+      "id": "skill-1782097318126",
+      "categoryName": "Metodologías",
+      "skills": [
+        "Scrum",
+        "Ágil"
+      ]
+    },
+    {
       "id": "skill-1",
       "categoryName": "Front end",
       "skills": [
-        "HTML",
-        "CSS",
-        "JS",
+        "React",
+        "HTML 5",
+        "CSS 3",
+        "JavaScript",
         "Three.js",
-        "Bootstrap"
+        "Bootstrap",
+        "Tailwind"
       ]
     },
     {
@@ -93,26 +126,21 @@
       "categoryName": "Back end",
       "skills": [
         "Node.js",
-        "PHP"
+        "PHP",
+        "Supabase",
+        "Firebase"
       ]
     },
     {
       "id": "skill-3",
       "categoryName": "Base de datos",
       "skills": [
+        "Excel Avanzado",
+        "Power BI",
         "My SQL",
         "SQL Server",
         ".json",
         ".xml"
-      ]
-    },
-    {
-      "id": "skill-4",
-      "categoryName": "UI & UX",
-      "skills": [
-        "Figma",
-        "Adobe Suite",
-        "Affinity Suite"
       ]
     },
     {
@@ -138,7 +166,17 @@
       "categoryName": "VFX / Edición de video",
       "skills": [
         "Blender Motion Traking",
+        "Blender Geometry Node",
         "Davinci Resolve"
+      ]
+    },
+    {
+      "id": "skill-4",
+      "categoryName": "UI & UX",
+      "skills": [
+        "Figma",
+        "Adobe Suite",
+        "Affinity Suite"
       ]
     },
     {

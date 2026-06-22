@@ -14,6 +14,87 @@ export const Preview: React.FC<PreviewProps> = ({
 }) => {
   const { personalInfo, summary, experience, education, skills, settings } = data;
 
+  // Dynamically set @page print size matching the exact content height of the CV
+  React.useEffect(() => {
+    const handleBeforePrint = () => {
+      const element = document.getElementById('cv-print-sheet');
+      if (element) {
+        // Measure exact width and height of the CV sheet on screen in pixels
+        const widthPx = element.offsetWidth || 820;
+        const heightPx = element.scrollHeight;
+        
+        // Convert pixels to mm: 1px = 25.4 / 96 = 0.264583 mm
+        const widthMm = (widthPx * 25.4) / 96;
+        const heightMm = (heightPx * 25.4) / 96;
+        
+        // We add a tiny 1mm height buffer to the page size to prevent rounding issues from causing a 2nd blank page,
+        // while maintaining the original unscaled content dimensions for the CV itself.
+        const pageHeightMm = heightMm + 1;
+        
+        let styleTag = document.getElementById('dynamic-print-sheet-size');
+        if (!styleTag) {
+          styleTag = document.createElement('style');
+          styleTag.id = 'dynamic-print-sheet-size';
+          document.head.appendChild(styleTag);
+        }
+        
+        styleTag.innerHTML = `
+          @media print {
+            @page {
+              size: ${widthMm}mm ${pageHeightMm}mm !important;
+              margin: 0 !important;
+            }
+            html, body {
+              margin: 0 !important;
+              padding: 0 !important;
+              width: ${widthMm}mm !important;
+              height: ${pageHeightMm}mm !important;
+              min-height: ${pageHeightMm}mm !important;
+              max-height: ${pageHeightMm}mm !important;
+            }
+            .preview-panel, .preview-container {
+              padding: 0 !important;
+              margin: 0 !important;
+              width: ${widthMm}mm !important;
+              max-width: ${widthMm}mm !important;
+            }
+            .cv-sheet {
+              box-shadow: none !important;
+              border: none !important;
+              border-radius: 0 !important;
+              margin: 0 !important;
+              width: ${widthMm}mm !important;
+              min-width: ${widthMm}mm !important;
+              max-width: ${widthMm}mm !important;
+              height: ${heightMm}mm !important;
+              min-height: ${heightMm}mm !important;
+              max-height: ${heightMm}mm !important;
+              box-sizing: border-box !important;
+            }
+          }
+        `;
+      }
+    };
+
+    const handleAfterPrint = () => {
+      const styleTag = document.getElementById('dynamic-print-sheet-size');
+      if (styleTag) {
+        styleTag.remove();
+      }
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+      const styleTag = document.getElementById('dynamic-print-sheet-size');
+      if (styleTag) {
+        styleTag.remove();
+      }
+    };
+  }, []);
+
   // Custom inline styles based on page settings
   const containerStyle = {
     fontFamily: settings.fontFamily || 'Georgia, serif',
@@ -54,21 +135,21 @@ export const Preview: React.FC<PreviewProps> = ({
   }
 
   // Filter sections to hide items that are completely blank
-  const activeExperience = experience.filter(job => 
-    job.company?.trim() || 
-    job.location?.trim() || 
-    job.title?.trim() || 
-    job.dates?.trim() || 
-    job.bullets?.some(b => b?.trim()) || 
+  const activeExperience = experience.filter(job =>
+    job.company?.trim() ||
+    job.location?.trim() ||
+    job.title?.trim() ||
+    job.dates?.trim() ||
+    job.bullets?.some(b => b?.trim()) ||
     job.references?.trim()
   );
 
-  const activeEducation = education.filter(edu => 
-    edu.institution?.trim() || 
-    edu.location?.trim() || 
-    edu.degree?.trim() || 
-    edu.dates?.trim() || 
-    edu.thesis?.trim() || 
+  const activeEducation = education.filter(edu =>
+    edu.institution?.trim() ||
+    edu.location?.trim() ||
+    edu.degree?.trim() ||
+    edu.dates?.trim() ||
+    edu.thesis?.trim() ||
     edu.courses?.some(c => c?.trim())
   );
 
@@ -81,17 +162,16 @@ export const Preview: React.FC<PreviewProps> = ({
     <div className="preview-container w-100 d-flex flex-column gap-3" style={{ maxWidth: '820px' }}>
       {/* Page indicator for non-print mode */}
       <div className="preview-page-header no-print d-flex justify-content-between align-items-center px-1 text-muted" style={{ fontSize: '0.8rem' }}>
-        <span>Vista Previa de Impresión (A4 / Carta)</span>
-        <span className="page-fit-hint fw-semibold text-primary opacity-75">Consejo: Mantén el contenido en 1 página.</span>
+        <span>Vista Previa</span>
       </div>
 
-      <div 
-        id="cv-print-sheet" 
-        className="cv-sheet shadow" 
+      <div
+        id="cv-print-sheet"
+        className="cv-sheet shadow"
         style={containerStyle}
       >
         {/* Personal Header */}
-        <header 
+        <header
           className={`cv-header text-center p-2 section-hover-trigger ${getHighlightClass('personal')}`}
           onMouseEnter={() => setHoveredSection('personal')}
           onMouseLeave={() => setHoveredSection(null)}
@@ -115,7 +195,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
         {/* Professional Summary */}
         {summary && summary.trim() && (
-          <section 
+          <section
             className={`cv-section p-2 mb-3 section-hover-trigger ${getHighlightClass('summary')}`}
             onMouseEnter={() => setHoveredSection('summary')}
             onMouseLeave={() => setHoveredSection(null)}
@@ -126,7 +206,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
         {/* Experience Section */}
         {activeExperience.length > 0 && (
-          <section 
+          <section
             className={`cv-section mb-3 p-2 ${getHighlightClass('experience')}`}
             onMouseEnter={() => setHoveredSection('experience')}
             onMouseLeave={() => setHoveredSection(null)}
@@ -137,8 +217,8 @@ export const Preview: React.FC<PreviewProps> = ({
               {activeExperience.map((job) => {
                 const activeBullets = (job.bullets || []).filter(b => b && b.trim() !== '');
                 return (
-                  <div 
-                    key={job.id} 
+                  <div
+                    key={job.id}
                     className={`experience-entry entry-block p-1 section-hover-trigger ${getHighlightClass(job.id)}`}
                     onMouseEnter={(e) => {
                       e.stopPropagation();
@@ -158,7 +238,7 @@ export const Preview: React.FC<PreviewProps> = ({
                         <span className="entry-dates fst-italic text-muted" style={{ fontSize: '9.5pt' }}>{job.dates?.trim() || ''}</span>
                       </div>
                     )}
-                    
+
                     {activeBullets.length > 0 && (
                       <ul className="bullets-list ps-3 mb-2" style={{ listStyleType: 'disc' }}>
                         {activeBullets.map((bullet, idx) => (
@@ -166,7 +246,7 @@ export const Preview: React.FC<PreviewProps> = ({
                         ))}
                       </ul>
                     )}
-                    
+
                     {job.references && job.references.trim() && (
                       <div className="reference-line fst-italic text-muted mt-2 ps-2 border-start border-2 border-light" style={{ fontSize: '9pt' }}>
                         Referencia: <span className="reference-text fw-semibold text-dark">{job.references.trim()}</span>
@@ -181,7 +261,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
         {/* Education Section */}
         {activeEducation.length > 0 && (
-          <section 
+          <section
             className={`cv-section mb-3 p-2 ${getHighlightClass('education')}`}
             onMouseEnter={() => setHoveredSection('education')}
             onMouseLeave={() => setHoveredSection(null)}
@@ -192,8 +272,8 @@ export const Preview: React.FC<PreviewProps> = ({
               {activeEducation.map((edu) => {
                 const activeCourses = (edu.courses || []).filter(c => c && c.trim() !== '');
                 return (
-                  <div 
-                    key={edu.id} 
+                  <div
+                    key={edu.id}
                     className={`education-entry entry-block p-1 section-hover-trigger ${getHighlightClass(edu.id)}`}
                     onMouseEnter={(e) => {
                       e.stopPropagation();
@@ -239,7 +319,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
         {/* Skills Section */}
         {activeSkills.length > 0 && (
-          <section 
+          <section
             className={`cv-section mb-3 p-2 skills-section ${getHighlightClass('skills')}`}
             onMouseEnter={() => setHoveredSection('skills')}
             onMouseLeave={() => setHoveredSection(null)}
@@ -250,8 +330,8 @@ export const Preview: React.FC<PreviewProps> = ({
               {activeSkills.map((skillCat) => {
                 const activeCatSkills = (skillCat.skills || []).filter(s => s && s.trim() !== '');
                 return (
-                  <div 
-                    key={skillCat.id} 
+                  <div
+                    key={skillCat.id}
                     className={`skills-row p-1 section-hover-trigger ${getHighlightClass(skillCat.id)}`}
                     onMouseEnter={(e) => {
                       e.stopPropagation();

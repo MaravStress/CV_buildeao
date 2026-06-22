@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { CVData } from '../types/cv';
-import { ALAN_NIN_CV } from '../constants/demoData';
+import { DEMO_CV_DATA } from '../constants/demoData';
 import { PersonalInfoForm } from './editor/PersonalInfoForm';
 import { SummaryForm } from './editor/SummaryForm';
 import { ExperienceForm } from './editor/ExperienceForm';
@@ -26,6 +26,7 @@ export const Editor: React.FC<EditorProps> = ({
   setHoveredSection
 }) => {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   // Helper to update personal info
   const handlePersonalInfoChange = (field: keyof CVData['personalInfo'], value: string) => {
@@ -59,7 +60,7 @@ export const Editor: React.FC<EditorProps> = ({
 
   // --- GLOBAL DOCUMENT OPERATIONS ---
   const loadDemoData = () => {
-    onChange(ALAN_NIN_CV);
+    onChange(DEMO_CV_DATA);
   };
 
   const clearAllData = () => {
@@ -108,8 +109,68 @@ export const Editor: React.FC<EditorProps> = ({
     }
   };
 
-  const triggerPrint = () => {
-    window.print();
+  const downloadPDF = () => {
+    const element = document.getElementById('cv-print-sheet');
+    if (element) {
+      setIsGeneratingPdf(true);
+      import('html2pdf.js').then((html2pdfModule) => {
+        const html2pdf = html2pdfModule.default;
+        
+        // Measure dimensions
+        const widthPx = element.offsetWidth || 820;
+        const heightPx = element.scrollHeight;
+        
+        // Convert to mm
+        const widthMm = (widthPx * 25.4) / 96;
+        const heightMm = (heightPx * 25.4) / 96;
+        
+        // Clone element to clean up edit classes
+        const clone = element.cloneNode(true) as HTMLElement;
+        clone.classList.remove('shadow');
+        clone.classList.remove('preview-highlighted');
+        clone.querySelectorAll('.preview-highlighted').forEach(el => el.classList.remove('preview-highlighted'));
+        clone.querySelectorAll('.section-hover-trigger').forEach(el => el.classList.remove('section-hover-trigger'));
+        
+        // Ensure background is solid white for the clone in PDF rendering
+        clone.style.backgroundColor = '#ffffff';
+        clone.style.width = `${widthPx}px`;
+        clone.style.height = `${heightPx}px`;
+        
+        const options = {
+          margin: 0,
+          filename: `${data.personalInfo.name.trim().replace(/\s+/g, '_') || 'Curriculum'}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { 
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+          },
+          jsPDF: { 
+            unit: 'mm', 
+            format: [widthMm, heightMm + 2], // 2mm buffer to prevent rounding overflow page break
+            orientation: 'portrait' 
+          },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+        
+        html2pdf()
+          .set(options)
+          .from(clone)
+          .save()
+          .then(() => {
+            setIsGeneratingPdf(false);
+          })
+          .catch((err) => {
+            console.error('Error rendering PDF:', err);
+            setIsGeneratingPdf(false);
+            alert('Ocurrió un error al generar el PDF. Por favor, intenta de nuevo.');
+          });
+      }).catch((err) => {
+        console.error('Error importing html2pdf:', err);
+        setIsGeneratingPdf(false);
+      });
+    }
   };
 
   // --- RENDERING MODAL HELPERS ---
@@ -320,9 +381,22 @@ export const Editor: React.FC<EditorProps> = ({
           </label>
         </div>
 
-        <button className="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2 mt-1" onClick={triggerPrint}>
-          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>print</span>
-          <span>Imprimir / PDF</span>
+        <button 
+          className="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2 mt-1" 
+          onClick={downloadPDF}
+          disabled={isGeneratingPdf}
+        >
+          {isGeneratingPdf ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <span>Generando PDF...</span>
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+              <span>Descargar como PDF</span>
+            </>
+          )}
         </button>
       </div>
 
