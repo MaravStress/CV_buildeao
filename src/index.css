@@ -1,0 +1,464 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Fira+Code:wght@400;500&display=swap');
+
+/* ==========================================
+   1. GLOBAL SYSTEM THEME & GLASS SYSTEM TOKENS
+   ========================================== */
+body {
+  background-color: #060913;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.03) 0%, transparent 45%);
+  color: #e2e8f0;
+  font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.2) rgba(10, 15, 30, 0.3);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(10, 15, 30, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 8px;
+  transition: background 0.25s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.35);
+}
+
+/* Material Symbols Icon Vertical Alignment Utility */
+.material-symbols-outlined {
+  vertical-align: middle;
+  line-height: 1;
+  font-size: inherit;
+}
+
+/* ==========================================
+   2. GLASSMORPHIC MENU (LEFT EDITOR BAR)
+   ========================================== */
+.editor-panel {
+  background: rgba(8, 12, 24, 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.topbar-logo {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #cbd5e1 30%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Dashboard Section Navigation Cards */
+.section-nav-card {
+  outline: none !important;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.01) !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.section-nav-card:hover {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.05);
+}
+
+.active-nav-card {
+  background: rgba(99, 102, 241, 0.06) !important;
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.1) !important;
+}
+
+.nav-card-icon-wrapper {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  color: #94a3b8;
+  transition: all 0.25s ease;
+}
+
+.section-nav-card:hover .nav-card-icon-wrapper,
+.active-nav-card .nav-card-icon-wrapper {
+  background: rgba(99, 102, 241, 0.1) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  color: #a5b4fc;
+}
+
+/* ==========================================
+   3. MINIMALIST FORMS & NESTED CARDS
+   ========================================== */
+.nested-card {
+  background: rgba(255, 255, 255, 0.01) !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  transition: all 0.25s ease;
+}
+
+.nested-card:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+.highlighted-editor-card {
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.08);
+}
+
+.item-title-badge {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Glass Inputs with Minimalist Bottom Line Focus */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+select,
+textarea {
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  color: #f8fafc !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 6px !important;
+  font-size: 0.88rem !important;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="url"]::placeholder,
+input[type="password"]::placeholder,
+textarea::placeholder {
+  color: #475569 !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08) !important;
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* ==========================================
+   4. GLASS & MINIMALIST BUTTONS
+   ========================================== */
+.btn {
+  font-size: 0.85rem !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #5a5ecf 0%, #4347be 100%) !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15) !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.25) !important;
+  background: linear-gradient(135deg, #6c71e2 0%, #5256d4 100%) !important;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #94a3b8 !important;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #f1f5f9 !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #94a3b8 !important;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  color: #f1f5f9 !important;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.06) !important;
+  border: 1px solid rgba(239, 68, 68, 0.1) !important;
+  color: #fca5a5 !important;
+}
+
+.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: #ef4444 !important;
+  color: white !important;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.08);
+  color: #f1f5f9;
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+.action-btn.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+.icon-btn-danger {
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.icon-btn-danger:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: 4px;
+}
+
+/* ==========================================
+   5. PAPER PREVIEW CONTAINER & SHEET DECOR
+   ========================================== */
+.preview-panel {
+  background: #090d16;
+  background-image: 
+    radial-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Simulated A4 sheet details */
+.cv-sheet {
+  background: #ffffff;
+  color: #1e293b;
+  min-height: 1050px;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Hover Highlighting border markers */
+.section-hover-trigger {
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.cv-sheet .section-hover-trigger:hover {
+  background-color: rgba(99, 102, 241, 0.02);
+  border: 1px dashed rgba(99, 102, 241, 0.15);
+}
+
+.preview-highlighted {
+  background-color: rgba(99, 102, 241, 0.04) !important;
+  border: 1px dashed rgba(99, 102, 241, 0.35) !important;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.04);
+}
+
+.contact-link {
+  color: #475569;
+  transition: color 0.15s ease;
+}
+
+.contact-link:hover {
+  color: #4f46e5;
+}
+
+.summary-text,
+.bullet-item {
+  text-align: justify;
+}
+
+/* ==========================================
+   6. PURE CSS PRINT LAYOUT ENGINE
+   ========================================== */
+@media print {
+  /* Hide all screen components */
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  /* Reset layout structure for printing */
+  .app-container,
+  body {
+    display: block !important;
+    height: auto !important;
+    width: auto !important;
+    background: none !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .preview-panel,
+  .preview-container {
+    padding: 0 !important;
+    background: none !important;
+    display: block !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Map standard printer sheet boundaries */
+  .cv-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    display: block !important;
+  }
+
+  /* Avoid page-breaks cutting elements awkwardly */
+  .entry-block {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-section {
+    page-break-inside: auto !important;
+  }
+  
+  a {
+    color: #000000 !important;
+    text-decoration: none !important;
+  }
+
+  /* Reset highlighters */
+  .section-hover-trigger,
+  .preview-highlighted {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    margin: 0; 
+    size: portrait;
+  }
+}
+
+/* ==========================================
+   7. RESPONSIVE HEIGHTS & SCROLL UTILITIES
+   ========================================== */
+@media (min-width: 992px) {
+  .vh-lg-100 {
+    height: 100vh !important;
+  }
+  .h-lg-100 {
+    height: 100% !important;
+  }
+  .overflow-lg-hidden {
+    overflow: hidden !important;
+  }
+  .overflow-lg-auto {
+    overflow: auto !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .vh-lg-100 {
+    height: auto !important;
+  }
+  .h-lg-100 {
+    height: auto !important;
+  }
+  .overflow-lg-hidden {
+    overflow: visible !important;
+  }
+  .overflow-lg-auto {
+    overflow: visible !important;
+  }
+}
+
+/* ==========================================
+   8. GLASSMORPHIC DIALOGS (BOOTSTRAP MODAL)
+   ========================================== */
+.modal-content {
+  background: rgba(10, 14, 24, 0.75) !important;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 12px !important;
+}
+
+.modal-backdrop {
+  background-color: #020408 !important;
+  opacity: 0.75 !important;
+}
+
+.modal-header, 
+.modal-footer {
+  border-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* ==========================================
+   9. AI PARSER SPIN STATE & UPLOADER GLOW
+   ========================================== */
+.alert-info {
+  background-color: rgba(99, 102, 241, 0.03) !important;
+  border-color: rgba(99, 102, 241, 0.08) !important;
+  color: #94a3b8 !important;
+}
+
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.03) !important;
+  border-color: rgba(239, 68, 68, 0.08) !important;
+  color: #fca5a5 !important;
+}
+
+.text-indigo {
+  color: #818cf8 !important;
+}
+
+.spinner-border {
+  border-width: 0.15em !important;
+}
+
+/* PDF Upload Zone Styles */
+.pdf-upload-dropzone {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  border: 1px dashed rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+}
+
+.pdf-upload-dropzone:hover {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.08);
+  transform: translateY(-1px);
+}

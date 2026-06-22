@@ -1,0 +1,161 @@
+import type { CVData } from '../types/cv';
+
+export const ALAN_NIN_CV: CVData = {
+  "personalInfo": {
+    "name": "ELIAM PAREDES",
+    "location": "Santo Domingo, RD",
+    "email": "eliamjesusparedes@gmail.com",
+    "phone": "+18296510720",
+    "website": "https://maravstress.github.io"
+  },
+  "summary": "Soy un profesional apasionado por la programación y el diseño, con una fuerte inclinación hacia el 3D. Mi formación en multimedia y mi actual carrera en ingeniería de software me permiten abordar proyectos desde una perspectiva técnica y creativa. Soluciones innovadoras que integren arte, código y tecnología.",
+  "experience": [
+    {
+      "id": "exp-1",
+      "company": "Upwork",
+      "location": "Online",
+      "title": "Diseñador 3D y Game Designer",
+      "dates": "Abr 2024 Presente",
+      "bullets": [
+        "Servicios freelance como diseñador 3D y programador de videojuegos."
+      ],
+      "references": ""
+    },
+    {
+      "id": "exp-2",
+      "company": "Marav Studios",
+      "location": "Online",
+      "title": "Director / Game Dev / Marketing",
+      "dates": "Nov 2020 - Presente",
+      "bullets": [
+        "Proyecto emprendedor: Publicación del videojuego \"TrapNight\" (2022)",
+        "Disponible en Google Play."
+      ],
+      "references": ""
+    },
+    {
+      "id": "exp-3",
+      "company": "Promo Design dp Group",
+      "location": "Santo Domingo Este",
+      "title": "Diseñador gráfico / Diseño web",
+      "dates": "Nov 2020 - Abr 2024",
+      "bullets": [
+        "Realizar diseños a pedido de los clientes para estampación textil.",
+        "Mantenimiento del sitio web.",
+        "Soporte de equipos de computo."
+      ],
+      "references": "Rosanna Turbi: Gerente de RRHH, Promo Design dp group info@promodp.com"
+    },
+    {
+      "id": "exp-4",
+      "company": "Reckers",
+      "location": "Online",
+      "title": "Game Dev / UI & UX Designer",
+      "dates": "Ago 2020 Nov 2021",
+      "bullets": [
+        "Desarrollo del videojuego \"Reck\" (App Store) y diseño de UI & UX."
+      ],
+      "references": ""
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-1",
+      "institution": "Universidad APEC",
+      "location": "",
+      "degree": "Ingeniería de Software",
+      "dates": "Abr 2024 Presente",
+      "thesis": "",
+      "courses": []
+    },
+    {
+      "id": "edu-2",
+      "institution": "ITLA (Instituto Tecnológico de Las Américas)",
+      "location": "",
+      "degree": "Tecnólogo en Multimedia",
+      "dates": "Sep 2020 - Abr 2024",
+      "thesis": "",
+      "courses": []
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill-1",
+      "categoryName": "Front end",
+      "skills": [
+        "HTML",
+        "CSS",
+        "JS",
+        "Three.js",
+        "Bootstrap"
+      ]
+    },
+    {
+      "id": "skill-2",
+      "categoryName": "Back end",
+      "skills": [
+        "Node.js",
+        "PHP"
+      ]
+    },
+    {
+      "id": "skill-3",
+      "categoryName": "Base de datos",
+      "skills": [
+        "My SQL",
+        "SQL Server",
+        ".json",
+        ".xml"
+      ]
+    },
+    {
+      "id": "skill-4",
+      "categoryName": "UI & UX",
+      "skills": [
+        "Figma",
+        "Adobe Suite",
+        "Affinity Suite"
+      ]
+    },
+    {
+      "id": "skill-5",
+      "categoryName": "Game Dev",
+      "skills": [
+        "Unity",
+        "AR & VR",
+        "C#"
+      ]
+    },
+    {
+      "id": "skill-6",
+      "categoryName": "3D",
+      "skills": [
+        "Blender",
+        "Maya 3D",
+        "Adobe Substance 3D Painter"
+      ]
+    },
+    {
+      "id": "skill-7",
+      "categoryName": "VFX / Edición de video",
+      "skills": [
+        "Blender Motion Traking",
+        "Davinci Resolve"
+      ]
+    },
+    {
+      "id": "skill-8",
+      "categoryName": "Idiomas",
+      "skills": [
+        "Español (Nativo)",
+        "Ingles (intermedio)"
+      ]
+    }
+  ],
+  "settings": {
+    "fontFamily": "Georgia, serif",
+    "fontSize": "11pt",
+    "lineSpacing": 1.25,
+    "margins": "0.6in"
+  }
+};
