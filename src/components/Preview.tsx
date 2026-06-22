@@ -5,12 +5,20 @@ interface PreviewProps {
   data: CVData;
   hoveredSection: string | null;
   setHoveredSection: (section: string | null) => void;
+  currentLang: 'es' | 'en';
+  isTranslating: boolean;
+  onLanguageChange: (lang: 'es' | 'en') => void;
+  onTranslate: () => void;
 }
 
 export const Preview: React.FC<PreviewProps> = ({
   data,
   hoveredSection,
-  setHoveredSection
+  setHoveredSection,
+  currentLang,
+  isTranslating,
+  onLanguageChange,
+  onTranslate
 }) => {
   const { personalInfo, summary, experience, education, skills, settings } = data;
 
@@ -160,13 +168,63 @@ export const Preview: React.FC<PreviewProps> = ({
 
   return (
     <div className="preview-container w-100 d-flex flex-column gap-3" style={{ maxWidth: '820px' }}>
-      {/* Page indicator for non-print mode */}
-      <div className="preview-page-header no-print d-flex justify-content-between align-items-center px-1 text-muted" style={{ fontSize: '0.8rem' }}>
-        <span>Vista Previa</span>
+      {/* Page indicator & switcher for non-print mode */}
+      <div className="preview-page-header no-print d-flex justify-content-between align-items-center px-1 text-muted" style={{ fontSize: '0.85rem' }}>
+        <div className="d-flex align-items-center gap-3">
+          <span className="fw-medium">Vista Previa</span>
+          <div className="d-flex align-items-center bg-dark bg-opacity-25 rounded-pill p-1 border border-secondary border-opacity-10" style={{ gap: '2px' }}>
+            <button
+              type="button"
+              className={`btn btn-sm rounded-pill py-0.5 px-3 border-0 transition-all ${currentLang === 'es' ? 'btn-primary text-white' : 'text-secondary bg-transparent'}`}
+              style={{ fontSize: '0.75rem', fontWeight: 500 }}
+              onClick={() => onLanguageChange('es')}
+              disabled={isTranslating}
+            >
+              Original (Español)
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm rounded-pill py-0.5 px-3 border-0 transition-all ${currentLang === 'en' ? 'btn-primary text-white' : 'text-secondary bg-transparent'}`}
+              style={{ fontSize: '0.75rem', fontWeight: 500 }}
+              onClick={() => onLanguageChange('en')}
+              disabled={isTranslating}
+            >
+              Inglés
+            </button>
+          </div>
+        </div>
+
+        {currentLang === 'en' && !isTranslating && (
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-warning border-warning border-opacity-20 d-flex align-items-center gap-1 py-1 px-2 rounded-3 transition-all"
+            style={{ fontSize: '0.75rem' }}
+            onClick={onTranslate}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>translate</span>
+            <span>Traducir</span>
+          </button>
+        )}
       </div>
 
-      <div
-        id="cv-print-sheet"
+      <div className="position-relative w-100">
+        {/* Glassmorphic Loading Overlay */}
+        {isTranslating && (
+          <div className="translation-overlay">
+            <div className="translation-card">
+              <div className="spinner-border translation-spinner mb-3" role="status">
+                <span className="visually-hidden">Traduciendo...</span>
+              </div>
+              <h5 className="text-white fw-bold mb-2">Traduciendo Currículum</h5>
+              <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>
+                Por favor espera mientras Gemini traduce tu información profesional al inglés...
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div
+          id="cv-print-sheet"
         className="cv-sheet shadow"
         style={containerStyle}
       >
@@ -347,6 +405,7 @@ export const Preview: React.FC<PreviewProps> = ({
             </div>
           </section>
         )}
+        </div>
       </div>
     </div>
   );

@@ -115,45 +115,45 @@ export const Editor: React.FC<EditorProps> = ({
       setIsGeneratingPdf(true);
       import('html2pdf.js').then((html2pdfModule) => {
         const html2pdf = html2pdfModule.default;
-        
+
         // Measure dimensions
         const widthPx = element.offsetWidth || 820;
         const heightPx = element.scrollHeight;
-        
+
         // Convert to mm
         const widthMm = (widthPx * 25.4) / 96;
         const heightMm = (heightPx * 25.4) / 96;
-        
+
         // Clone element to clean up edit classes
         const clone = element.cloneNode(true) as HTMLElement;
         clone.classList.remove('shadow');
         clone.classList.remove('preview-highlighted');
         clone.querySelectorAll('.preview-highlighted').forEach(el => el.classList.remove('preview-highlighted'));
         clone.querySelectorAll('.section-hover-trigger').forEach(el => el.classList.remove('section-hover-trigger'));
-        
+
         // Ensure background is solid white for the clone in PDF rendering
         clone.style.backgroundColor = '#ffffff';
         clone.style.width = `${widthPx}px`;
         clone.style.height = `${heightPx}px`;
-        
+
         const options = {
           margin: 0,
           filename: `${data.personalInfo.name.trim().replace(/\s+/g, '_') || 'Curriculum'}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { 
+          html2canvas: {
             scale: 2,
             useCORS: true,
             logging: false,
             backgroundColor: '#ffffff'
           },
-          jsPDF: { 
-            unit: 'mm', 
+          jsPDF: {
+            unit: 'mm',
             format: [widthMm, heightMm + 2], // 2mm buffer to prevent rounding overflow page break
-            orientation: 'portrait' 
+            orientation: 'portrait'
           },
           pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
-        
+
         html2pdf()
           .set(options)
           .from(clone)
@@ -313,7 +313,7 @@ export const Editor: React.FC<EditorProps> = ({
     <div className="editor-panel col-12 col-lg-4 col-xl-3 h-lg-100 d-flex flex-column border-end border-secondary border-opacity-10 overflow-lg-hidden no-print">
       {/* Top Header Actions */}
       <div className="editor-topbar p-3 border-bottom d-flex justify-content-between align-items-center bg-dark bg-opacity-25">
-        <h2 className="topbar-logo m-0">CV Builder</h2>
+        <h2 className="topbar-logo m-0">CV Buildeao</h2>
         <div className="topbar-actions d-flex gap-2">
           <button
             className="btn btn-secondary flex-btn py-1 px-2 d-flex align-items-center"
@@ -381,8 +381,8 @@ export const Editor: React.FC<EditorProps> = ({
           </label>
         </div>
 
-        <button 
-          className="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2 mt-1" 
+        <button
+          className="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2 mt-1"
           onClick={downloadPDF}
           disabled={isGeneratingPdf}
         >
