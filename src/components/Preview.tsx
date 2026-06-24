@@ -9,6 +9,7 @@ interface PreviewProps {
   isTranslating: boolean;
   onLanguageChange: (lang: 'es' | 'en') => void;
   onTranslate: () => void;
+  onOpenSettings: () => void;
 }
 
 export const Preview: React.FC<PreviewProps> = ({
@@ -18,7 +19,8 @@ export const Preview: React.FC<PreviewProps> = ({
   currentLang,
   isTranslating,
   onLanguageChange,
-  onTranslate
+  onTranslate,
+  onOpenSettings
 }) => {
   const { personalInfo, summary, experience, education, skills, settings } = data;
 
@@ -193,17 +195,29 @@ export const Preview: React.FC<PreviewProps> = ({
           </div>
         </div>
 
-        {currentLang === 'en' && !isTranslating && (
+        <div className="d-flex align-items-center gap-2">
+          {currentLang === 'en' && !isTranslating && (
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-warning border-warning border-opacity-20 d-flex align-items-center gap-1 py-1 px-2 rounded-3 transition-all"
+              style={{ fontSize: '0.75rem' }}
+              onClick={onTranslate}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>translate</span>
+              <span>Traducir</span>
+            </button>
+          )}
+
           <button
             type="button"
-            className="btn btn-sm btn-outline-warning border-warning border-opacity-20 d-flex align-items-center gap-1 py-1 px-2 rounded-3 transition-all"
-            style={{ fontSize: '0.75rem' }}
-            onClick={onTranslate}
+            className="btn btn-sm btn-secondary p-1 d-flex align-items-center justify-content-center rounded-circle transition-all"
+            style={{ width: '30px', height: '30px', border: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer' }}
+            onClick={onOpenSettings}
+            title="Configurar Gemini API Key"
           >
-            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>translate</span>
-            <span>Traducir</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>settings</span>
           </button>
-        )}
+        </div>
       </div>
 
       <div className="position-relative w-100">

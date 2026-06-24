@@ -5,7 +5,7 @@ import { Preview } from './components/Preview';
 import type { CVData } from './types/cv';
 import { DEMO_CV_DATA } from './constants/demoData';
 import { FONT_OPTIONS } from './constants/fonts';
-import { translateCVToEnglish } from './services/translator';
+import { translateCVToEnglish, testApiKey } from './services/translator';
 
 function App() {
   // Initialize with Spanish CV data as original
@@ -40,6 +40,8 @@ function App() {
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const [pendingLangChange, setPendingLangChange] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState(() => localStorage.getItem('gemini_api_key_cv_builder') || '');
+  const [isTestingKey, setIsTestingKey] = useState(false);
+  const [testResult, setTestResult] = useState<'success' | 'failure' | null>(null);
 
   // Track hovered section for synchronized UI highlights
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
@@ -114,6 +116,7 @@ function App() {
           runTranslation(apiKey.trim());
         } else {
           setPendingLangChange(true);
+          setTestResult(null);
           setShowApiKeyModal(true);
         }
       }
@@ -126,8 +129,28 @@ function App() {
       runTranslation(apiKey.trim());
     } else {
       setPendingLangChange(true);
+      setTestResult(null);
       setShowApiKeyModal(true);
     }
+  };
+
+  const handleOpenApiKeySettings = () => {
+    setPendingLangChange(false);
+    setTestResult(null);
+    setApiKeyInput(localStorage.getItem('gemini_api_key_cv_builder') || '');
+    setShowApiKeyModal(true);
+  };
+
+  const handleTestApiKey = async () => {
+    if (!apiKeyInput.trim()) {
+      alert('Por favor, ingresa una API Key para probar.');
+      return;
+    }
+    setIsTestingKey(true);
+    setTestResult(null);
+    const isValid = await testApiKey(apiKeyInput.trim());
+    setTestResult(isValid ? 'success' : 'failure');
+    setIsTestingKey(false);
   };
 
   const handleSaveApiKey = () => {
@@ -170,6 +193,7 @@ function App() {
             isTranslating={isTranslating}
             onLanguageChange={handleLanguageChange}
             onTranslate={handleForceTranslate}
+            onOpenSettings={handleOpenApiKeySettings}
           />
         </main>
       </div>
@@ -189,8 +213,8 @@ function App() {
               <div className="modal-content border border-secondary border-opacity-15 bg-dark text-white rounded-3 shadow-lg">
                 <div className="modal-header border-bottom border-secondary border-opacity-15 p-3 d-flex justify-content-between align-items-center">
                   <h5 className="modal-title d-flex align-items-center gap-2 m-0 fs-5 fw-semibold">
-                    <span className="material-symbols-outlined text-warning fs-5">auto_awesome</span>
-                    <span>Gemini API Key</span>
+                    <span className="material-symbols-outlined text-warning fs-5">settings</span>
+                    <span>Configurar Gemini API Key</span>
                   </h5>
                   <button
                     type="button"
@@ -207,21 +231,57 @@ function App() {
                 </div>
                 <div className="modal-body p-4 text-start">
                   <div className="alert alert-info border-secondary border-opacity-15 bg-dark bg-opacity-25 py-2 px-3 rounded text-muted mb-3" style={{ fontSize: '0.85rem' }}>
-                    <strong>¿Por qué se requiere?</strong> Para traducir tu currículum al inglés, usamos la inteligencia artificial de Google Gemini. Necesitas una clave API gratuita.
+                    <strong>¿Cómo obtener tu clave?</strong> Para traducir tu currículum al inglés con IA, necesitas una API Key de Gemini.
                     <br />
-                    Puedes obtenerla en <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-primary fw-semibold">Google AI Studio</a> en un par de clics.
+                    Consigue una gratis en <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="text-primary fw-semibold">Google AI Studio</a>. Se guardará de forma segura en tu navegador.
                   </div>
                   
                   <div className="form-group mb-2">
                     <label htmlFor="modal-gemini-key" className="form-label mb-1">Gemini API Key</label>
-                    <input
-                      id="modal-gemini-key"
-                      type="password"
-                      className="form-control"
-                      placeholder="Pega tu API Key de Gemini aquí..."
-                      value={apiKeyInput}
-                      onChange={e => setApiKeyInput(e.target.value)}
-                    />
+                    <div className="d-flex gap-2">
+                      <input
+                        id="modal-gemini-key"
+                        type="password"
+                        className="form-control flex-grow-1"
+                        placeholder="Pega tu API Key de Gemini aquí..."
+                        value={apiKeyInput}
+                        onChange={e => {
+                          setApiKeyInput(e.target.value);
+                          if (testResult) setTestResult(null);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-secondary px-3 d-flex align-items-center gap-1 flex-shrink-0"
+                        onClick={handleTestApiKey}
+                        disabled={isTestingKey}
+                      >
+                        {isTestingKey ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span>Probando...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>check_circle</span>
+                            <span>Probar</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {testResult === 'success' && (
+                      <div className="text-success mt-2 fw-medium d-flex align-items-center gap-1" style={{ fontSize: '0.82rem' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>check</span>
+                        <span>¡Conexión exitosa! La API Key es válida.</span>
+                      </div>
+                    )}
+                    {testResult === 'failure' && (
+                      <div className="text-danger mt-2 fw-medium d-flex align-items-center gap-1" style={{ fontSize: '0.82rem' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>close</span>
+                        <span>Clave API Inválida o error de conexión. Por favor, verifícala.</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="modal-footer border-top border-secondary border-opacity-15 p-3 d-flex justify-content-end gap-2">
@@ -240,7 +300,7 @@ function App() {
                     className="btn btn-primary px-4"
                     onClick={handleSaveApiKey}
                   >
-                    Guardar y Traducir
+                    {pendingLangChange ? 'Guardar y Traducir' : 'Guardar'}
                   </button>
                 </div>
               </div>

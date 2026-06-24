@@ -83,3 +83,21 @@ export const translateCVToEnglish = async (cvData: CVData, apiKey: string): Prom
     }) : cvData.skills,
   };
 };
+
+/**
+ * Tests if the given Gemini API key is valid by sending a minimal request.
+ * @param apiKey The API key to test.
+ */
+export const testApiKey = async (apiKey: string): Promise<boolean> => {
+  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const result = await model.generateContent("Responder únicamente con la palabra 'OK'");
+    const response = await result.response;
+    return response.text().trim().toUpperCase().includes('OK');
+  } catch (error) {
+    console.error('API Key Test failed:', error);
+    return false;
+  }
+};
+
