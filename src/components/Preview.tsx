@@ -30,22 +30,22 @@ export const Preview: React.FC<PreviewProps> = ({
         // Measure exact width and height of the CV sheet on screen in pixels
         const widthPx = element.offsetWidth || 820;
         const heightPx = element.scrollHeight;
-        
+
         // Convert pixels to mm: 1px = 25.4 / 96 = 0.264583 mm
         const widthMm = (widthPx * 25.4) / 96;
         const heightMm = (heightPx * 25.4) / 96;
-        
+
         // We add a tiny 1mm height buffer to the page size to prevent rounding issues from causing a 2nd blank page,
         // while maintaining the original unscaled content dimensions for the CV itself.
         const pageHeightMm = heightMm + 1;
-        
+
         let styleTag = document.getElementById('dynamic-print-sheet-size');
         if (!styleTag) {
           styleTag = document.createElement('style');
           styleTag.id = 'dynamic-print-sheet-size';
           document.head.appendChild(styleTag);
         }
-        
+
         styleTag.innerHTML = `
           @media print {
             @page {
@@ -171,7 +171,6 @@ export const Preview: React.FC<PreviewProps> = ({
       {/* Page indicator & switcher for non-print mode */}
       <div className="preview-page-header no-print d-flex justify-content-between align-items-center px-1 text-muted" style={{ fontSize: '0.85rem' }}>
         <div className="d-flex align-items-center gap-3">
-          <span className="fw-medium">Vista Previa</span>
           <div className="d-flex align-items-center bg-dark bg-opacity-25 rounded-pill p-1 border border-secondary border-opacity-10" style={{ gap: '2px' }}>
             <button
               type="button"
@@ -225,186 +224,186 @@ export const Preview: React.FC<PreviewProps> = ({
 
         <div
           id="cv-print-sheet"
-        className="cv-sheet shadow"
-        style={containerStyle}
-      >
-        {/* Personal Header */}
-        <header
-          className={`cv-header text-center p-2 section-hover-trigger ${getHighlightClass('personal')}`}
-          onMouseEnter={() => setHoveredSection('personal')}
-          onMouseLeave={() => setHoveredSection(null)}
+          className="cv-sheet shadow"
+          style={containerStyle}
         >
-          <h1 className="candidate-name fw-bold m-0 text-dark" style={{ fontSize: '24pt', letterSpacing: '-0.5px' }}>
-            {personalInfo.name || 'Tu Nombre'}
-          </h1>
-          {contactItems.length > 0 && (
-            <div className="contact-info d-flex justify-content-center align-items-center flex-wrap gap-2 mt-2 text-muted" style={{ fontSize: '9pt' }}>
-              {contactItems.map((item, idx) => (
-                <React.Fragment key={idx}>
-                  {idx > 0 && <span className="separator text-muted text-opacity-25 px-1">|</span>}
-                  {item}
-                </React.Fragment>
-              ))}
-            </div>
+          {/* Personal Header */}
+          <header
+            className={`cv-header text-center p-2 section-hover-trigger ${getHighlightClass('personal')}`}
+            onMouseEnter={() => setHoveredSection('personal')}
+            onMouseLeave={() => setHoveredSection(null)}
+          >
+            <h1 className="candidate-name fw-bold m-0 text-dark" style={{ fontSize: '24pt', letterSpacing: '-0.5px' }}>
+              {personalInfo.name || 'Tu Nombre'}
+            </h1>
+            {contactItems.length > 0 && (
+              <div className="contact-info d-flex justify-content-center align-items-center flex-wrap gap-2 mt-2 text-muted" style={{ fontSize: '9pt' }}>
+                {contactItems.map((item, idx) => (
+                  <React.Fragment key={idx}>
+                    {idx > 0 && <span className="separator text-muted text-opacity-25 px-1">|</span>}
+                    {item}
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+          </header>
+
+          <hr className="header-divider border-dark border-opacity-70 my-3" style={{ height: '1px' }} />
+
+          {/* Professional Summary */}
+          {summary && summary.trim() && (
+            <section
+              className={`cv-section p-2 mb-3 section-hover-trigger ${getHighlightClass('summary')}`}
+              onMouseEnter={() => setHoveredSection('summary')}
+              onMouseLeave={() => setHoveredSection(null)}
+            >
+              <p className="summary-text text-justify m-0 text-muted" style={{ lineHeight: 'inherit' }}>{summary.trim()}</p>
+            </section>
           )}
-        </header>
 
-        <hr className="header-divider border-dark border-opacity-70 my-3" style={{ height: '1px' }} />
+          {/* Experience Section */}
+          {activeExperience.length > 0 && (
+            <section
+              className={`cv-section mb-3 p-2 ${getHighlightClass('experience')}`}
+              onMouseEnter={() => setHoveredSection('experience')}
+              onMouseLeave={() => setHoveredSection(null)}
+            >
+              <h2 className="section-title fw-bold m-0 text-dark" style={{ fontSize: '11pt', letterSpacing: '0.8px' }}>EXPERIENCIA</h2>
+              <hr className="section-divider border-secondary border-opacity-25 my-1" style={{ height: '1px' }} />
+              <div className="experience-list d-flex flex-column gap-3 mt-2">
+                {activeExperience.map((job) => {
+                  const activeBullets = (job.bullets || []).filter(b => b && b.trim() !== '');
+                  return (
+                    <div
+                      key={job.id}
+                      className={`experience-entry entry-block p-1 section-hover-trigger ${getHighlightClass(job.id)}`}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        setHoveredSection(job.id);
+                      }}
+                      onMouseLeave={() => setHoveredSection(null)}
+                    >
+                      {(job.company?.trim() || job.location?.trim()) && (
+                        <div className="entry-header d-flex justify-content-between align-items-baseline fw-bold text-dark" style={{ fontSize: '10pt' }}>
+                          <span className="company-name text-uppercase">{job.company?.trim() || ''}</span>
+                          <span className="entry-location fw-normal text-muted" style={{ fontSize: '9.5pt' }}>{job.location?.trim() || ''}</span>
+                        </div>
+                      )}
+                      {(job.title?.trim() || job.dates?.trim()) && (
+                        <div className="entry-subheader d-flex justify-content-between align-items-baseline mb-1">
+                          <span className="job-title fw-bold text-secondary" style={{ fontSize: '9.5pt' }}>{job.title?.trim() || ''}</span>
+                          <span className="entry-dates fst-italic text-muted" style={{ fontSize: '9.5pt' }}>{job.dates?.trim() || ''}</span>
+                        </div>
+                      )}
 
-        {/* Professional Summary */}
-        {summary && summary.trim() && (
-          <section
-            className={`cv-section p-2 mb-3 section-hover-trigger ${getHighlightClass('summary')}`}
-            onMouseEnter={() => setHoveredSection('summary')}
-            onMouseLeave={() => setHoveredSection(null)}
-          >
-            <p className="summary-text text-justify m-0 text-muted" style={{ lineHeight: 'inherit' }}>{summary.trim()}</p>
-          </section>
-        )}
-
-        {/* Experience Section */}
-        {activeExperience.length > 0 && (
-          <section
-            className={`cv-section mb-3 p-2 ${getHighlightClass('experience')}`}
-            onMouseEnter={() => setHoveredSection('experience')}
-            onMouseLeave={() => setHoveredSection(null)}
-          >
-            <h2 className="section-title fw-bold m-0 text-dark" style={{ fontSize: '11pt', letterSpacing: '0.8px' }}>EXPERIENCIA</h2>
-            <hr className="section-divider border-secondary border-opacity-25 my-1" style={{ height: '1px' }} />
-            <div className="experience-list d-flex flex-column gap-3 mt-2">
-              {activeExperience.map((job) => {
-                const activeBullets = (job.bullets || []).filter(b => b && b.trim() !== '');
-                return (
-                  <div
-                    key={job.id}
-                    className={`experience-entry entry-block p-1 section-hover-trigger ${getHighlightClass(job.id)}`}
-                    onMouseEnter={(e) => {
-                      e.stopPropagation();
-                      setHoveredSection(job.id);
-                    }}
-                    onMouseLeave={() => setHoveredSection(null)}
-                  >
-                    {(job.company?.trim() || job.location?.trim()) && (
-                      <div className="entry-header d-flex justify-content-between align-items-baseline fw-bold text-dark" style={{ fontSize: '10pt' }}>
-                        <span className="company-name text-uppercase">{job.company?.trim() || ''}</span>
-                        <span className="entry-location fw-normal text-muted" style={{ fontSize: '9.5pt' }}>{job.location?.trim() || ''}</span>
-                      </div>
-                    )}
-                    {(job.title?.trim() || job.dates?.trim()) && (
-                      <div className="entry-subheader d-flex justify-content-between align-items-baseline mb-1">
-                        <span className="job-title fw-bold text-secondary" style={{ fontSize: '9.5pt' }}>{job.title?.trim() || ''}</span>
-                        <span className="entry-dates fst-italic text-muted" style={{ fontSize: '9.5pt' }}>{job.dates?.trim() || ''}</span>
-                      </div>
-                    )}
-
-                    {activeBullets.length > 0 && (
-                      <ul className="bullets-list ps-3 mb-2" style={{ listStyleType: 'disc' }}>
-                        {activeBullets.map((bullet, idx) => (
-                          <li key={idx} className="bullet-item text-justify mb-1 text-muted" style={{ lineHeight: 'inherit' }}>{bullet.trim()}</li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {job.references && job.references.trim() && (
-                      <div className="reference-line fst-italic text-muted mt-2 ps-2 border-start border-2 border-light" style={{ fontSize: '9pt' }}>
-                        Referencia: <span className="reference-text fw-semibold text-dark">{job.references.trim()}</span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* Education Section */}
-        {activeEducation.length > 0 && (
-          <section
-            className={`cv-section mb-3 p-2 ${getHighlightClass('education')}`}
-            onMouseEnter={() => setHoveredSection('education')}
-            onMouseLeave={() => setHoveredSection(null)}
-          >
-            <h2 className="section-title fw-bold m-0 text-dark" style={{ fontSize: '11pt', letterSpacing: '0.8px' }}>EDUCACIÓN</h2>
-            <hr className="section-divider border-secondary border-opacity-25 my-1" style={{ height: '1px' }} />
-            <div className="education-list d-flex flex-column gap-3 mt-2">
-              {activeEducation.map((edu) => {
-                const activeCourses = (edu.courses || []).filter(c => c && c.trim() !== '');
-                return (
-                  <div
-                    key={edu.id}
-                    className={`education-entry entry-block p-1 section-hover-trigger ${getHighlightClass(edu.id)}`}
-                    onMouseEnter={(e) => {
-                      e.stopPropagation();
-                      setHoveredSection(edu.id);
-                    }}
-                    onMouseLeave={() => setHoveredSection(null)}
-                  >
-                    {(edu.institution?.trim() || edu.location?.trim()) && (
-                      <div className="entry-header d-flex justify-content-between align-items-baseline fw-bold text-dark" style={{ fontSize: '10pt' }}>
-                        <span className="institution-name text-uppercase">{edu.institution?.trim() || ''}</span>
-                        <span className="entry-location fw-normal text-muted" style={{ fontSize: '9.5pt' }}>{edu.location?.trim() || ''}</span>
-                      </div>
-                    )}
-                    {(edu.degree?.trim() || edu.dates?.trim()) && (
-                      <div className="entry-subheader d-flex justify-content-between align-items-baseline mb-1">
-                        <span className="degree-title fw-normal text-secondary" style={{ fontSize: '9.5pt' }}>{edu.degree?.trim() || ''}</span>
-                        <span className="entry-dates fst-italic text-muted" style={{ fontSize: '9.5pt' }}>{edu.dates?.trim() || ''}</span>
-                      </div>
-                    )}
-
-                    {edu.thesis && edu.thesis.trim() && (
-                      <p className="thesis-text text-muted mb-2">
-                        Tesis: <span className="thesis-title fst-italic">{edu.thesis.trim()}</span>
-                      </p>
-                    )}
-
-                    {activeCourses.length > 0 && (
-                      <div className="courses-wrapper mt-2">
-                        <span className="courses-header fw-semibold text-dark" style={{ fontSize: '9.5pt' }}>Cursos Relevantes y Certificaciones:</span>
-                        <ul className="bullets-list courses-list ps-3 mb-0 mt-1" style={{ listStyleType: 'disc' }}>
-                          {activeCourses.map((course, idx) => (
-                            <li key={idx} className="bullet-item text-justify mb-1 text-muted" style={{ lineHeight: 'inherit' }}>{course.trim()}</li>
+                      {activeBullets.length > 0 && (
+                        <ul className="bullets-list ps-3 mb-2" style={{ listStyleType: 'disc' }}>
+                          {activeBullets.map((bullet, idx) => (
+                            <li key={idx} className="bullet-item text-justify mb-1 text-muted" style={{ lineHeight: 'inherit' }}>{bullet.trim()}</li>
                           ))}
                         </ul>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
+                      )}
 
-        {/* Skills Section */}
-        {activeSkills.length > 0 && (
-          <section
-            className={`cv-section mb-3 p-2 skills-section ${getHighlightClass('skills')}`}
-            onMouseEnter={() => setHoveredSection('skills')}
-            onMouseLeave={() => setHoveredSection(null)}
-          >
-            <h2 className="section-title fw-bold m-0 text-dark" style={{ fontSize: '11pt', letterSpacing: '0.8px' }}>HABILIDADES</h2>
-            <hr className="section-divider border-secondary border-opacity-25 my-1" style={{ height: '1px' }} />
-            <div className="skills-grid d-flex flex-column gap-1 mt-2">
-              {activeSkills.map((skillCat) => {
-                const activeCatSkills = (skillCat.skills || []).filter(s => s && s.trim() !== '');
-                return (
-                  <div
-                    key={skillCat.id}
-                    className={`skills-row p-1 section-hover-trigger ${getHighlightClass(skillCat.id)}`}
-                    onMouseEnter={(e) => {
-                      e.stopPropagation();
-                      setHoveredSection(skillCat.id);
-                    }}
-                    onMouseLeave={() => setHoveredSection(null)}
-                  >
-                    <span className="skill-category-label fw-bold text-dark">{skillCat.categoryName.trim()}:</span>{' '}
-                    <span className="skills-list-text text-muted">{activeCatSkills.join(', ')}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
+                      {job.references && job.references.trim() && (
+                        <div className="reference-line fst-italic text-muted mt-2 ps-2 border-start border-2 border-light" style={{ fontSize: '9pt' }}>
+                          Referencia: <span className="reference-text fw-semibold text-dark">{job.references.trim()}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Education Section */}
+          {activeEducation.length > 0 && (
+            <section
+              className={`cv-section mb-3 p-2 ${getHighlightClass('education')}`}
+              onMouseEnter={() => setHoveredSection('education')}
+              onMouseLeave={() => setHoveredSection(null)}
+            >
+              <h2 className="section-title fw-bold m-0 text-dark" style={{ fontSize: '11pt', letterSpacing: '0.8px' }}>EDUCACIÓN</h2>
+              <hr className="section-divider border-secondary border-opacity-25 my-1" style={{ height: '1px' }} />
+              <div className="education-list d-flex flex-column gap-3 mt-2">
+                {activeEducation.map((edu) => {
+                  const activeCourses = (edu.courses || []).filter(c => c && c.trim() !== '');
+                  return (
+                    <div
+                      key={edu.id}
+                      className={`education-entry entry-block p-1 section-hover-trigger ${getHighlightClass(edu.id)}`}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        setHoveredSection(edu.id);
+                      }}
+                      onMouseLeave={() => setHoveredSection(null)}
+                    >
+                      {(edu.institution?.trim() || edu.location?.trim()) && (
+                        <div className="entry-header d-flex justify-content-between align-items-baseline fw-bold text-dark" style={{ fontSize: '10pt' }}>
+                          <span className="institution-name text-uppercase">{edu.institution?.trim() || ''}</span>
+                          <span className="entry-location fw-normal text-muted" style={{ fontSize: '9.5pt' }}>{edu.location?.trim() || ''}</span>
+                        </div>
+                      )}
+                      {(edu.degree?.trim() || edu.dates?.trim()) && (
+                        <div className="entry-subheader d-flex justify-content-between align-items-baseline mb-1">
+                          <span className="degree-title fw-normal text-secondary" style={{ fontSize: '9.5pt' }}>{edu.degree?.trim() || ''}</span>
+                          <span className="entry-dates fst-italic text-muted" style={{ fontSize: '9.5pt' }}>{edu.dates?.trim() || ''}</span>
+                        </div>
+                      )}
+
+                      {edu.thesis && edu.thesis.trim() && (
+                        <p className="thesis-text text-muted mb-2">
+                          Tesis: <span className="thesis-title fst-italic">{edu.thesis.trim()}</span>
+                        </p>
+                      )}
+
+                      {activeCourses.length > 0 && (
+                        <div className="courses-wrapper mt-2">
+                          <span className="courses-header fw-semibold text-dark" style={{ fontSize: '9.5pt' }}>Cursos Relevantes y Certificaciones:</span>
+                          <ul className="bullets-list courses-list ps-3 mb-0 mt-1" style={{ listStyleType: 'disc' }}>
+                            {activeCourses.map((course, idx) => (
+                              <li key={idx} className="bullet-item text-justify mb-1 text-muted" style={{ lineHeight: 'inherit' }}>{course.trim()}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Skills Section */}
+          {activeSkills.length > 0 && (
+            <section
+              className={`cv-section mb-3 p-2 skills-section ${getHighlightClass('skills')}`}
+              onMouseEnter={() => setHoveredSection('skills')}
+              onMouseLeave={() => setHoveredSection(null)}
+            >
+              <h2 className="section-title fw-bold m-0 text-dark" style={{ fontSize: '11pt', letterSpacing: '0.8px' }}>HABILIDADES</h2>
+              <hr className="section-divider border-secondary border-opacity-25 my-1" style={{ height: '1px' }} />
+              <div className="skills-grid d-flex flex-column gap-1 mt-2">
+                {activeSkills.map((skillCat) => {
+                  const activeCatSkills = (skillCat.skills || []).filter(s => s && s.trim() !== '');
+                  return (
+                    <div
+                      key={skillCat.id}
+                      className={`skills-row p-1 section-hover-trigger ${getHighlightClass(skillCat.id)}`}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        setHoveredSection(skillCat.id);
+                      }}
+                      onMouseLeave={() => setHoveredSection(null)}
+                    >
+                      <span className="skill-category-label fw-bold text-dark">{skillCat.categoryName.trim()}:</span>{' '}
+                      <span className="skills-list-text text-muted">{activeCatSkills.join(', ')}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>
