@@ -110,67 +110,11 @@ export const Editor: React.FC<EditorProps> = ({
   };
 
   const downloadPDF = () => {
-    const element = document.getElementById('cv-print-sheet');
-    if (element) {
-      setIsGeneratingPdf(true);
-      import('html2pdf.js').then((html2pdfModule) => {
-        const html2pdf = html2pdfModule.default;
-
-        // Measure dimensions
-        const widthPx = element.offsetWidth || 820;
-        const heightPx = element.scrollHeight;
-
-        // Convert to mm
-        const widthMm = (widthPx * 25.4) / 96;
-        const heightMm = (heightPx * 25.4) / 96;
-
-        // Clone element to clean up edit classes
-        const clone = element.cloneNode(true) as HTMLElement;
-        clone.classList.remove('shadow');
-        clone.classList.remove('preview-highlighted');
-        clone.querySelectorAll('.preview-highlighted').forEach(el => el.classList.remove('preview-highlighted'));
-        clone.querySelectorAll('.section-hover-trigger').forEach(el => el.classList.remove('section-hover-trigger'));
-
-        // Ensure background is solid white for the clone in PDF rendering
-        clone.style.backgroundColor = '#ffffff';
-        clone.style.width = `${widthPx}px`;
-        clone.style.height = `${heightPx}px`;
-
-        const options = {
-          margin: 0,
-          filename: `${data.personalInfo.name.trim().replace(/\s+/g, '_') || 'Curriculum'}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: {
-            scale: 2,
-            useCORS: true,
-            logging: false,
-            backgroundColor: '#ffffff'
-          },
-          jsPDF: {
-            unit: 'mm',
-            format: [widthMm, heightMm + 2], // 2mm buffer to prevent rounding overflow page break
-            orientation: 'portrait'
-          },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-
-        html2pdf()
-          .set(options)
-          .from(clone)
-          .save()
-          .then(() => {
-            setIsGeneratingPdf(false);
-          })
-          .catch((err) => {
-            console.error('Error rendering PDF:', err);
-            setIsGeneratingPdf(false);
-            alert('Ocurrió un error al generar el PDF. Por favor, intenta de nuevo.');
-          });
-      }).catch((err) => {
-        console.error('Error importing html2pdf:', err);
-        setIsGeneratingPdf(false);
-      });
-    }
+    // We now use native browser printing to preserve text as vectors.
+    // The Preview component uses a ResizeObserver to dynamically inject an @page CSS rule
+    // so that the printed page exactly matches the dimensions of the CV content,
+    // avoiding pagination and showing everything on a single page.
+    window.print();
   };
 
   // --- RENDERING MODAL HELPERS ---

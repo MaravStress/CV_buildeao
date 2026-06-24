@@ -26,7 +26,7 @@ export const Preview: React.FC<PreviewProps> = ({
 
   // Dynamically set @page print size matching the exact content height of the CV
   React.useEffect(() => {
-    const handleBeforePrint = () => {
+    const updatePrintSize = () => {
       const element = document.getElementById('cv-print-sheet');
       if (element) {
         // Measure exact width and height of the CV sheet on screen in pixels
@@ -86,24 +86,31 @@ export const Preview: React.FC<PreviewProps> = ({
       }
     };
 
-    const handleAfterPrint = () => {
-      const styleTag = document.getElementById('dynamic-print-sheet-size');
-      if (styleTag) {
-        styleTag.remove();
-      }
-    };
+    // Initial update
+    updatePrintSize();
 
-    window.addEventListener('beforeprint', handleBeforePrint);
-    window.addEventListener('afterprint', handleAfterPrint);
+    // Set up ResizeObserver to update size whenever content changes
+    const element = document.getElementById('cv-print-sheet');
+    let resizeObserver: ResizeObserver | null = null;
+    
+    if (element) {
+      resizeObserver = new ResizeObserver(() => {
+        updatePrintSize();
+      });
+      resizeObserver.observe(element);
+    }
+
     return () => {
-      window.removeEventListener('beforeprint', handleBeforePrint);
-      window.removeEventListener('afterprint', handleAfterPrint);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       const styleTag = document.getElementById('dynamic-print-sheet-size');
       if (styleTag) {
         styleTag.remove();
       }
     };
-  }, []);
+  }, [data]); // Re-run when data changes just to be safe, though ResizeObserver handles it
+
 
   // Custom inline styles based on page settings
   const containerStyle = {
