@@ -4,6 +4,7 @@ export interface PersonalInfo {
   email: string;
   phone: string;
   website: string;
+  linkedin: string;
 }
 
 export interface ExperienceEntry {

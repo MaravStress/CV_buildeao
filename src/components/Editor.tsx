@@ -64,7 +64,7 @@ export const Editor: React.FC<EditorProps> = ({
 
   const clearAllData = () => {
     onChange({
-      personalInfo: { name: '', location: '', email: '', phone: '', website: '' },
+      personalInfo: { name: '', location: '', email: '', phone: '', website: '', linkedin: '' },
       summary: '',
       experience: [],
       education: [],

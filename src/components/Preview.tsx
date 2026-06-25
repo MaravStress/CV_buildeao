@@ -149,6 +149,13 @@ export const Preview: React.FC<PreviewProps> = ({
       </a>
     );
   }
+  if (personalInfo.linkedin?.trim()) {
+    contactItems.push(
+      <a key="linkedin" href={personalInfo.linkedin.trim()} target="_blank" rel="noopener noreferrer" className="contact-link text-decoration-none text-muted">
+        {personalInfo.linkedin.trim().replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+      </a>
+    );
+  }
 
   // Filter sections to hide items that are completely blank
   const activeExperience = experience.filter(job =>

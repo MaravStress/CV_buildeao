@@ -65,7 +65,7 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
           />
         </div>
       </div>
-      <div className="col-12 form-group">
+      <div className="col-12 col-md-6 form-group">
         <label htmlFor="pf-web" className="form-label mb-1">Sitio Web / Portfolio (URL)</label>
         <div className="input-with-icon position-relative">
           <span className="material-symbols-outlined input-icon position-absolute start-0 top-50 translate-middle-y ms-2 text-muted" style={{ fontSize: '1rem' }}>public</span>
@@ -76,6 +76,20 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
             placeholder="https://alannin.dev"
             value={personalInfo.website}
             onChange={e => onChange('website', e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="col-12 col-md-6 form-group">
+        <label htmlFor="pf-linkedin" className="form-label mb-1">LinkedIn (URL)</label>
+        <div className="input-with-icon position-relative">
+          <span className="material-symbols-outlined input-icon position-absolute start-0 top-50 translate-middle-y ms-2 text-muted" style={{ fontSize: '1rem' }}>link</span>
+          <input
+            id="pf-linkedin"
+            type="url"
+            className="form-control ps-4"
+            placeholder="https://linkedin.com/in/alannin"
+            value={personalInfo.linkedin}
+            onChange={e => onChange('linkedin', e.target.value)}
           />
         </div>
       </div>

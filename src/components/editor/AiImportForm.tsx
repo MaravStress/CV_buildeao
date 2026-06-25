@@ -84,6 +84,7 @@ export const AiImportForm: React.FC<AiImportFormProps> = ({
           email: string;
           phone: string;
           website: string;
+          linkedin: string;
         }
 
         interface ExperienceEntry {
@@ -149,6 +150,7 @@ export const AiImportForm: React.FC<AiImportFormProps> = ({
             email: parsedData.personalInfo?.email || '',
             phone: parsedData.personalInfo?.phone || '',
             website: parsedData.personalInfo?.website || '',
+            linkedin: parsedData.personalInfo?.linkedin || '',
           },
           summary: parsedData.summary || '',
           experience: Array.isArray(parsedData.experience) ? parsedData.experience.map((exp: any, i: number) => ({
