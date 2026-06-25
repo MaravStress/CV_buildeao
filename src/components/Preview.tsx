@@ -24,7 +24,7 @@ export const Preview: React.FC<PreviewProps> = ({
 }) => {
   const { personalInfo, summary, experience, education, skills, settings } = data;
 
-  // Dynamically set @page print size matching the exact content height of the CV
+  // Dynamically set @page print size matching the exact content height of the CV to ensure single-page PDF print output
   React.useEffect(() => {
     const updatePrintSize = () => {
       const element = document.getElementById('cv-print-sheet');
@@ -51,8 +51,8 @@ export const Preview: React.FC<PreviewProps> = ({
         styleTag.innerHTML = `
           @media print {
             @page {
-              size: ${widthMm}mm ${pageHeightMm}mm !important;
-              margin: 0 !important;
+              size: ${widthMm}mm ${pageHeightMm}mm;
+              margin: 0;
             }
             html, body {
               margin: 0 !important;
@@ -109,8 +109,7 @@ export const Preview: React.FC<PreviewProps> = ({
         styleTag.remove();
       }
     };
-  }, [data]); // Re-run when data changes just to be safe, though ResizeObserver handles it
-
+  }, [data]); // Re-run when data changes
 
   // Custom inline styles based on page settings
   const containerStyle = {

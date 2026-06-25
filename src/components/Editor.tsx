@@ -26,7 +26,6 @@ export const Editor: React.FC<EditorProps> = ({
   setHoveredSection
 }) => {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   // Helper to update personal info
   const handlePersonalInfoChange = (field: keyof CVData['personalInfo'], value: string) => {
@@ -328,19 +327,9 @@ export const Editor: React.FC<EditorProps> = ({
         <button
           className="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2 mt-1"
           onClick={downloadPDF}
-          disabled={isGeneratingPdf}
         >
-          {isGeneratingPdf ? (
-            <>
-              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              <span>Generando PDF...</span>
-            </>
-          ) : (
-            <>
-              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
-              <span>Descargar como PDF</span>
-            </>
-          )}
+          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+          <span>Descargar como PDF</span>
         </button>
       </div>
 
