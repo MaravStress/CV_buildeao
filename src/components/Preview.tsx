@@ -152,7 +152,7 @@ export const Preview: React.FC<PreviewProps> = ({
   if (personalInfo.linkedin?.trim()) {
     contactItems.push(
       <a key="linkedin" href={personalInfo.linkedin.trim()} target="_blank" rel="noopener noreferrer" className="contact-link text-decoration-none text-muted">
-        {personalInfo.linkedin.trim().replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+        LinkedIn
       </a>
     );
   }
