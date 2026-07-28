@@ -1,4 +1,3 @@
-import type { CVData } from '../types/cv';
-import eliamData from './ELIAM_PAREDES_Data.json';
+import { EMPTY_CV_DATA } from '../services/firebaseCvApi';
 
-export const DEMO_CV_DATA: CVData = eliamData as CVData;
+export const DEMO_CV_DATA = EMPTY_CV_DATA;
