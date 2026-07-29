@@ -57,20 +57,17 @@ function App() {
   // Track hovered section for synchronized UI highlights
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
 
-  // Initial fetch from Firebase if localStorage is uninitialized (first visit)
+  // Always fetch latest CV data from Firebase Realtime Database on application mount
   useEffect(() => {
-    const saved = localStorage.getItem('professional_cv_builder_data');
-    if (!saved) {
-      fetchCvFromFirebase()
-        .then((cloudData) => {
-          if (cloudData && cloudData.personalInfo.name) {
-            setCvDataEs(cloudData);
-          }
-        })
-        .catch((err) => {
-          console.warn('Initial Firebase CV fetch warning:', err);
-        });
-    }
+    fetchCvFromFirebase()
+      .then((cloudData) => {
+        if (cloudData && (cloudData.personalInfo?.name || cloudData.summary || cloudData.experience?.length)) {
+          setCvDataEs(cloudData);
+        }
+      })
+      .catch((err) => {
+        console.warn('Initial Firebase CV fetch warning:', err);
+      });
   }, []);
 
   // Subscribe to Firebase Auth changes
